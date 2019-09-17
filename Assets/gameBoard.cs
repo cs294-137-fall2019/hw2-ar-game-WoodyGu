@@ -8,6 +8,8 @@ public class gameBoard : MonoBehaviour
     public List<GameObject> childrenObjects = new List<GameObject>();
     public GameObject[,] gameBoardCells = new GameObject[3,3];
     public GameObject messageText;
+    public float targetTime = 10.0f;
+
     void Start()
     {
         foreach (Transform child in transform)
@@ -30,6 +32,12 @@ public class gameBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        targetTime -= Time.deltaTime;
+
+        if (targetTime <= 0.0f)
+        {
+            timerEnded();
+        }
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
@@ -62,8 +70,14 @@ public class gameBoard : MonoBehaviour
                 }
                 if (isValid())
                 {
+                    this.messageText.GetComponent<UnityEngine.UI.Text>().text = "You Win!";
                     this.messageText.SetActive(true);
                 }
+                //if (this.moves >= 10)
+                //{
+                //    this.messageText.GetComponent<UnityEngine.UI.Text>().text = "You Lose!";
+                //    this.messageText.SetActive(true);
+                //}
             }
         }
     }
@@ -82,6 +96,12 @@ public class gameBoard : MonoBehaviour
             }
         }
         return true;
+    }
+
+    void timerEnded()
+    {
+        this.messageText.GetComponent<UnityEngine.UI.Text>().text = "You Lose!";
+        this.messageText.SetActive(true);
     }
 
     void generateNumbers()
@@ -115,6 +135,7 @@ public class gameBoard : MonoBehaviour
             }
         }
         this.messageText.SetActive(false);
+        this.targetTime = 10.0f;
     }
 }
 
